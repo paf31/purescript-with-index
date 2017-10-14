@@ -2,4 +2,4 @@
 
 A tiny library for composing indexed traversals
 
-- [Module Documentation](generated-docs/Data/WithIndex.purs)
+- [Module Documentation](generated-docs/Data/WithIndex.md)
