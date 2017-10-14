@@ -63,7 +63,7 @@ Newtype (Indexed i a b) _
 reindex :: forall i j a b. (i -> j) -> Indexed i a b -> Indexed j a b
 ```
 
-Change the @Monoid@ used to combine indices.
+Change the `Monoid` used to combine indices.
 
 For example, to keep track of only the first index seen, use `Data.Maybe.First`:
 

@@ -57,7 +57,7 @@ instance semigroupoidIndexed :: Semigroup i => Semigroupoid (Indexed i) where
 instance categoryIndexed :: Monoid i => Category (Indexed i) where
   id = Indexed \i -> i mempty
 
--- | Change the @Monoid@ used to combine indices.
+-- | Change the `Monoid` used to combine indices.
 -- |
 -- | For example, to keep track of only the first index seen, use `Data.Maybe.First`:
 -- |
