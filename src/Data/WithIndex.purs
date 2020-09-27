@@ -39,14 +39,14 @@ import Data.Newtype (class Newtype)
 -- | For example, using the `Data.Map` module:
 -- |
 -- | ```purescript
--- | WithIndex mapWithKey
+-- | WithIndex mapWithIndex
 -- |   :: WithIndex i (a -> b) (Map i a -> Map i b)
 -- | ```
 -- |
 -- | These wrapped functions can be composed using the composition operator:
 -- |
 -- | ```purescript
--- | WithIndex mapWithKey . WithIndex mapWithKey
+-- | WithIndex mapWithIndex . WithIndex mapWithIndex
 -- |   :: Monoid i =>
 -- |      WithIndex i (a -> b) (Map i (Map i a) -> Map i (Map i b))
 -- | ```
@@ -54,7 +54,7 @@ import Data.Newtype (class Newtype)
 -- | and then applied using `withIndex`:
 -- |
 -- | ```purescript
--- | withIndex $ WithIndex mapWithKey . WithIndex mapWithKey
+-- | withIndex $ WithIndex mapWithIndex . WithIndex mapWithIndex
 -- |   :: Monoid i => (i -> a -> b) -> Map i (Map i a) -> Map i (Map i b)
 -- | ```
 newtype WithIndex i a b = WithIndex ((i -> a) -> b)
@@ -91,7 +91,7 @@ reindex ij (WithIndex f) = WithIndex \a -> f (a <<< ij)
 -- | For example, to traverse two layers, keeping only the first index:
 -- |
 -- | ```purescript
--- | WithIndex mapWithKey . withoutIndex map
+-- | WithIndex mapWithIndex . withoutIndex map
 -- |   :: Monoid i =>
 -- |      WithIndex i (a -> b) (Map i (Map k a) -> Map i (Map k b))
 -- | ```
