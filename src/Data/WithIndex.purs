@@ -32,7 +32,6 @@ module Data.WithIndex
 
 import Prelude
 
-import Data.Monoid (class Monoid, mempty)
 import Data.Newtype (class Newtype)
 
 -- | A wrapper for a mapping or traversal function which uses an index.
@@ -66,7 +65,7 @@ instance semigroupoidWithIndex :: Semigroup i => Semigroupoid (WithIndex i) wher
   compose (WithIndex f) (WithIndex g) = WithIndex \b -> f \i1 -> g \i2 -> b (i1 <> i2)
 
 instance categoryWithIndex :: Monoid i => Category (WithIndex i) where
-  id = WithIndex \i -> i mempty
+  identity = WithIndex \i -> i mempty
 
 -- | Change the `Monoid` used to combine indices.
 -- |

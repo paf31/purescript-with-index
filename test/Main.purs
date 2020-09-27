@@ -2,18 +2,18 @@ module Test.Main where
 
 import Prelude
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (log)
-import Control.Monad.Eff.Console as Console
 import Data.Foldable (fold)
+import Data.FunctorWithIndex (mapWithIndex)
 import Data.Identity (Identity(..))
 import Data.Map as Map
-import Data.Monoid (class Monoid)
 import Data.Newtype (class Newtype, unwrap)
 import Data.Traversable (sequence)
 import Data.Tuple (Tuple(..))
-import Data.WithIndex as WI
 import Data.WithIndex ((<.>), (.>))
+import Data.WithIndex as WI
+import Effect (Effect)
+import Effect.Console (log)
+import Effect.Console as Console
 
 data PhoneType = Home | Cell | Work
 
@@ -78,13 +78,13 @@ phoneBook = Map.singleton (LastName "Fakeman") $ Map.fromFoldable
   ]
 
 mapWithKey :: forall k a b. WI.WithIndex k (a -> b) (Map.Map k a -> Map.Map k b)
-mapWithKey = WI.WithIndex Map.mapWithKey
+mapWithKey = WI.WithIndex mapWithIndex
 
 foldMapWithKey :: forall k a m. Monoid m => WI.WithIndex k (a -> m) (Map.Map k a -> m)
-foldMapWithKey = WI.WithIndex \f m -> fold (Map.mapWithKey f m)
+foldMapWithKey = WI.WithIndex \f m -> fold (mapWithIndex f m)
 
 traverseWithKey :: forall k a b f. Applicative f => WI.WithIndex k (a -> f b) (Map.Map k a -> f (Map.Map k b))
-traverseWithKey = WI.WithIndex \f m -> sequence (Map.mapWithKey f m)
+traverseWithKey = WI.WithIndex \f m -> sequence (mapWithIndex f m)
 
 data CompositeIndex = CompositeIndex LastName FirstName PhoneType
 
@@ -97,9 +97,9 @@ traverseNumbers = unwrap $
 mapNumbers :: forall a b. (CompositeIndex -> a -> b) -> PhoneBook a -> PhoneBook b
 mapNumbers f pn = unwrap (traverseNumbers (\ci s -> Identity (f ci s)) pn)
 
-main :: Eff (console :: Console.CONSOLE) Unit
+main :: Effect Unit
 main = do
-  let showIndexAndValue :: forall a. Show a => CompositeIndex -> a -> Eff (console :: Console.CONSOLE) Unit
+  let showIndexAndValue :: forall a. Show a => CompositeIndex -> a -> Effect Unit
       showIndexAndValue (CompositeIndex lastName firstName _) value = do
         Console.log $ fold
           [ unwrap firstName
